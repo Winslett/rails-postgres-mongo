@@ -8,12 +8,11 @@ Before running, you shoudl have the following installed on your machine:
 * MongoDB
 
 ## Walkthrough
-
-1. Create the rails application: `rails new rails-postgres-mongo`
+* Create the rails application: `rails new rails-postgres-mongo`
 
 ## Setup Postgres connection for Rails application
-2. Change `Gemfile` from `sqlite3` to `pg` so we will use our Postgres locally
-3. Change `config/database.yml` to:
+* Change `Gemfile` from `sqlite3` to `pg` so we will use our Postgres locally
+* Change `config/database.yml` to:
 
 ```yaml
 default: &default
@@ -27,8 +26,8 @@ development:
 ```
 
 ## Create the model mapping for ActiveRecord
-4. Generate a new ActiveRecord model for User: `rails g model User`
-5. Change `db/migrate/*_create_users.rb` to:
+* Generate a new ActiveRecord model for User: `rails g model User`
+* Change `db/migrate/*_create_users.rb` to:
 
 ```ruby
 class CreateUsers < ActiveRecord::Migration
@@ -43,24 +42,24 @@ end
 ```
 
 ## Run migrations for Postgresql database
-6. Run `rake db:create`
-7. Run `rake db:migrate`
+* Run `rake db:create`
+* Run `rake db:migrate`
 
 ## Test Postgres connection
-8. Run `rails console`:
+* Run `rails console`:
 
 ```
 > User.create!(name: "Chris", email: "chris@compose.io")
 ```
 
 ## Create Mongo connection for Rails application
-9. Append to `Gemfile`: `gem 'mongoid'`
-10. Run a Mongoid configuration installation script: `rails g mongoid:config`
-11. Replace `config/application.rb` line 7 with `Bundler.require(:default, Rails.env)`
+* Append to `Gemfile`: `gem 'mongoid'`
+* Run a Mongoid configuration installation script: `rails g mongoid:config`
+* Replace `config/application.rb` line 7 with `Bundler.require(:default, Rails.env)`
 
 ## Create Mongoid model files
-12. Run `rails g model Status`
-13. Change `app/model/status.rb` to:
+* Run `rails g model Status`
+* Change `app/model/status.rb` to:
 
 ```
 class Status
@@ -74,7 +73,7 @@ end
 
 ## Create the relationships in the data model
 
-14. Define how `user.rb` will use status:
+* Define how `user.rb` will use status:
 ```ruby
 class User < ActiveRecord::Base
 
@@ -93,7 +92,7 @@ class User < ActiveRecord::Base
 end
 ```
 
-15. Define how `status.rb` will use user:
+* Define how `status.rb` will use user:
 ```ruby
 class Status
   include Mongoid::Document
