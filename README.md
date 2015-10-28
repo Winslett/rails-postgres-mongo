@@ -1,6 +1,6 @@
 ## Setup
 
-Before running, you shoudl have the following installed on your machine:
+Before running, you should have the following installed on your machine:
 
 * Ruby
 * Rails
@@ -49,11 +49,11 @@ end
 * Run `rails console`:
 
 ```
-> User.create!(name: "Chris", email: "chris@compose.io")
+> User.create!(name: “Chris”, email: “chris@compose.io”)
 ```
 
 ## Create Mongo connection for Rails application
-* Append to `Gemfile`: `gem 'mongoid'`
+* Append to `Gemfile`: `gem ‘mongoid’`
 * Run a Mongoid configuration installation script: `rails g mongoid:config`
 * Replace `config/application.rb` line 7 with `Bundler.require(:default, Rails.env)`
 
@@ -105,4 +105,86 @@ class Status
     User.find(self.user_id)
   end
 end
+```
+
+# Start your application
+
+```
+rackup
+```
+
+open http://localhost:9292/
+
+# Setup a default route
+
+Change `config/routes.rb` to:
+
+```
+Rails.application.routes.draw do
+  root “users#index”
+end
+```
+
+# Create a users controller
+
+```
+rails g controller Users
+```
+
+Then, set the UsersController to:
+
+```
+class UsersController < ApplicationController
+  def index
+    @users = User
+  end
+end
+```
+
+# Create view
+
+```
+<h1>Users</h1>
+
+<ul>
+  <%- @users.all.each do |user| %>
+    <li><%= user.name %> - <%= user.status.status %></li>
+  <%- end %>
+</ul>
+```
+
+# Add bootstrap stylesheets to the body
+
+```
+<!— Latest compiled and minified CSS —>
+<link rel=“stylesheet” href=“https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css” integrity=“sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==“ crossorigin=“anonymous”>
+
+<!— Optional theme —>
+<link rel=“stylesheet” href=“https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css” integrity=“sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX” crossorigin=“anonymous”>
+
+<!— Latest compiled and minified JavaScript —>
+<script src=“https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js” integrity=“sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==“ crossorigin=“anonymous”></script>
+```
+
+# Let’s add a form to automatically add new statuses
+
+Append this to your users#index form:
+
+```
+<%- form_for [:user, Status.new] do ||f| %>
+  <div class=‘form-input’>
+    <input type=‘text’ name=‘user’>
+  </div>
+  <div class=‘form-input’>
+    <input type=‘text’ name=‘status’>
+  </div>
+<%- end %>
+```
+
+Add this your `config/routes.rb` to this:
+
+```
+  resources :users do
+    resources :statuses
+  end
 ```
